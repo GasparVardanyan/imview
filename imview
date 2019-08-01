@@ -7,20 +7,11 @@ posH=50
 posV=50
 
 clear
+echo "\033[?25l"
 while :
 do
-
-	printf '\033'
-	test "${TERM#*screen}" != "$TERM" && printf "Ptmux;\033\033"
-	printf "]20;$file;""$scale""x""$scale""+$posH+$posV:op=keep-aspect\a"
-	test "${TERM#*screen}" != "$TERM" && printf "\033\\"
-	printf '\033[?25l'
+	echo "\033]20;""$file"";""$scale""x""$scale""+""$posH""+""$posV"":op=keep-aspect\a"
 	read -k1 -s inp
-	printf '\033[?25h'
-	printf '\033]'
-	test "${TERM#*screen}" != "$TERM" && printf "Ptmux;\033\033"
-	printf '20;;100x100+1000+1000\a'
-	test "${TERM#*screen}" != "$TERM" && printf "\033\\"
 	
 	if [[ $inp == 'q' ]] ; then
 		break
@@ -52,8 +43,9 @@ do
 		posH=50
 		posV=50
 	fi
-
 done
+echo "\033]20;;100x100+1000+1000\a"
+echo "\033[?25h"
 clear
 
 true
