@@ -32,14 +32,14 @@ do
 		zoom=100
 	elif [[ $inp == 'h' ]] ; then
 		[[ $posH -ge 10 ]] && ((posH-=10))
-    elif [[ $inp == 'j' ]] ; then
-        [[ $posV -le 90 ]] && ((posV+=10))
-    elif [[ $inp == 'k' ]] ; then
-        [[ $posV -ge 10 ]] && ((posV-=10))
-    elif [[ $inp == 'l' ]] ; then
-        [[ $posH -le 90 ]] && ((posH+=10))
-    elif [[ $inp == 'c' ]] ; then
-        posH=50
+	elif [[ $inp == 'j' ]] ; then
+		[[ $posV -le 90 ]] && ((posV+=10))
+	elif [[ $inp == 'k' ]] ; then
+		[[ $posV -ge 10 ]] && ((posV-=10))
+	elif [[ $inp == 'l' ]] ; then
+		[[ $posH -le 90 ]] && ((posH+=10))
+	elif [[ $inp == 'c' ]] ; then
+		posH=50
 		posV=50
 	elif [[ $inp == '0' ]] ; then
 		zoom=100
