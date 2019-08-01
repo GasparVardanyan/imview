@@ -2,7 +2,7 @@
 
 file="$(readlink -f $1)"
 inp=''
-zoom=100
+scale=100
 posH=50
 posV=50
 
@@ -12,7 +12,7 @@ do
 
 	printf '\033'
 	test "${TERM#*screen}" != "$TERM" && printf "Ptmux;\033\033"
-	printf "]20;$file;""$zoom""x""$zoom""+$posH+$posV:op=keep-aspect\a"
+	printf "]20;$file;""$scale""x""$scale""+$posH+$posV:op=keep-aspect\a"
 	test "${TERM#*screen}" != "$TERM" && printf "\033\\"
 	printf '\033[?25l'
 	read -k1 -s inp
@@ -25,11 +25,13 @@ do
 	if [[ $inp == 'q' ]] ; then
 		break
 	elif [[ $inp == '+' ]] ; then
-		((zoom+=10))
+		[[ $scale == 0 ]] && scale=100 || ((scale+=10))
 	elif [[ $inp == '-' ]] ; then
-		[[ $zoom -ge 10 ]] && ((zoom-=10))
-	elif [[ $inp == '=' ]] ; then
-		zoom=100
+		if [[ $scale == 0 ]] ; then
+			scale=100
+		else
+			[[ $scale -ge 20 ]] && ((scale-=10))
+		fi
 	elif [[ $inp == 'h' ]] ; then
 		[[ $posH -ge 10 ]] && ((posH-=10))
 	elif [[ $inp == 'j' ]] ; then
@@ -37,12 +39,16 @@ do
 	elif [[ $inp == 'k' ]] ; then
 		[[ $posV -ge 10 ]] && ((posV-=10))
 	elif [[ $inp == 'l' ]] ; then
-		[[ $posH -le 90 ]] && ((posH+=10))
+		[[ $posH -le 90 ]] && ((posH+=10))	
+	elif [[ $inp == '0' ]] ; then
+		scale=100
+	elif [[ $inp == '=' ]] ; then
+		scale=0
 	elif [[ $inp == 'c' ]] ; then
 		posH=50
 		posV=50
-	elif [[ $inp == '0' ]] ; then
-		zoom=100
+	elif [[ $inp == 'r' ]] ; then
+		scale=100
 		posH=50
 		posV=50
 	fi
