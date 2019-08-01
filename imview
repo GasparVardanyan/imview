@@ -1,0 +1,53 @@
+#!/bin/zsh
+
+file="$(readlink -f $1)"
+inp=''
+zoom=100
+posH=50
+posV=50
+
+clear
+while :
+do
+
+	printf '\033'
+	test "${TERM#*screen}" != "$TERM" && printf "Ptmux;\033\033"
+	printf "]20;$file;""$zoom""x""$zoom""+$posH+$posV:op=keep-aspect\a"
+	test "${TERM#*screen}" != "$TERM" && printf "\033\\"
+	printf '\033[?25l'
+	read -k1 -s inp
+	printf '\033[?25h'
+	printf '\033]'
+	test "${TERM#*screen}" != "$TERM" && printf "Ptmux;\033\033"
+	printf '20;;100x100+1000+1000\a'
+	test "${TERM#*screen}" != "$TERM" && printf "\033\\"
+	
+	if [[ $inp == 'q' ]] ; then
+		break
+	elif [[ $inp == '+' ]] ; then
+		((zoom+=10))
+	elif [[ $inp == '-' ]] ; then
+		[[ $zoom -ge 10 ]] && ((zoom-=10))
+	elif [[ $inp == '=' ]] ; then
+		zoom=100
+	elif [[ $inp == 'h' ]] ; then
+		[[ $posH -ge 10 ]] && ((posH-=10))
+    elif [[ $inp == 'j' ]] ; then
+        [[ $posV -le 90 ]] && ((posV+=10))
+    elif [[ $inp == 'k' ]] ; then
+        [[ $posV -ge 10 ]] && ((posV-=10))
+    elif [[ $inp == 'l' ]] ; then
+        [[ $posH -le 90 ]] && ((posH+=10))
+    elif [[ $inp == 'c' ]] ; then
+        posH=50
+		posV=50
+	elif [[ $inp == '0' ]] ; then
+		zoom=100
+		posH=50
+		posV=50
+	fi
+
+done
+clear
+
+true
